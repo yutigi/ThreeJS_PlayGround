@@ -1,4 +1,5 @@
 import { DirectionalLight, Mesh, MeshPhysicalMaterial, PerspectiveCamera, PlaneGeometry, Scene, Sphere, SphereGeometry, WebGLRenderer } from "three"
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 
 export interface CanvasSize {
     width: number,
@@ -38,6 +39,10 @@ export class JSRender {
         this.Camera.position.set(0,0,10)
         this.Camera.rotation.x = 0.1
         this.Scene.add(this.Camera)
+
+        // controls
+        const controls = new OrbitControls( this.Camera, this.renderer.domElement );
+        controls.update()
 
         this.DrawGeometry()
 

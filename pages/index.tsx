@@ -1,5 +1,7 @@
-import { useEffect } from "react"
+import { MutableRefObject, useEffect, useRef } from "react"
+import { Example1_Canvas } from "../src/example1Render"
 import { JSRender } from "../src/JSRender"
+import example1 from "./example1"
 
 const Index = () => {
 
@@ -9,9 +11,10 @@ const Index = () => {
     },[])
   
     return (
-  
+        <>
         <canvas id="WebGL"></canvas>
-  
+        <button><a href='/example1'>Example1</a></button>
+        </>
       )
   }
   
