@@ -39,9 +39,67 @@ export class KeychronQ2Render {
     exrCubeRenderTarget: WebGLRenderTarget
     exrBackground: Texture
 
-    isPress = {
+    isPress = {       
+        // layer 1
+        Backquote: false,
+        Digit1: false,
+        Digit2: false,
+        Digit3: false,
+        Digit4: false,
+        Digit5: false,
+        Digit6: false,
+        Digit7: false,
+        Digit8: false,
+        Digit9: false,
+        Digit0: false,
+        Minus: false,
+        Equal: false,
+        Backspace: false,
+
+        // layer 2
+
+        Q: false,
+        W: false,
+        E: false,
+        R: false,
+        T: false,
+        Y: false,
+        U: false,
+        I: false,
+        O: false,
+        P: false,
+        BracketLeft: false,
+        BracketRight: false,
+        Backslash: false,
+        
+        // layer 3
+        A: false,
+        S: false,
+        D: false,
         F: false,
-        A: false
+        G: false,
+        H: false,
+        J: false,
+        K: false,
+        L: false,
+        Semicolon: false,
+        Quote: false,
+        Enter: false,
+
+        // layer 4
+        Z: false,
+        X: false,
+        C: false,
+        V: false,
+        B: false,
+        N: false,
+        M: false,
+        Comma: false,
+        Period: false,
+        Slash: false,
+
+        // layer 5
+        Space: false
     }
 
     constructor(canvas: HTMLElement) {
@@ -57,49 +115,434 @@ export class KeychronQ2Render {
         window.addEventListener('keyup', this.KeyUp)
     }
 
+    KeyPressAction = (Key:string ,isPress:boolean) =>{
+        this.KeyChronQ2Model.traverse(geo =>{
+            if(geo instanceof Mesh)
+            {
+                if(geo.name === Key && !isPress)
+                {
+                    geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y + PressDownAmount.Amount 
+                    isPress = true
+                }          
+            }
+        })
+    }
+    KeyReleaseAction = (Key:string ,isPress:boolean) =>{
+        this.KeyChronQ2Model.traverse(geo =>{
+            if(geo instanceof Mesh)
+            {
+                if(geo.name === Key && !isPress)
+                {
+                    geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y - PressDownAmount.Amount 
+                    isPress = false
+                }          
+            }
+        })
+    }
+
     KeyPress = Key => {
-        //console.log(Key)
+        console.log(Key)
         const name = Key.key
         const code = Key.code
-        //console.log("Code is " + code)
         if(code === 'KeyF')
         {
-            console.log("Press KeyF")
-            console.log(this.KeyChronQ2Model)
-            this.KeyChronQ2Model.traverse(geo => 
-            {
-                if(geo instanceof Mesh)
-                {
-                    if(geo.name === "Key_F" && !this.isPress.F)
-                    {
-                        geo.getObjectByName("Key_F").position.y = geo.getObjectByName("Key_F").position.y + PressDownAmount.Amount 
-                        this.isPress.F = true
-                    }          
-                }
-            })
+            //console.log("Press KeyF")
+            //console.log(this.KeyChronQ2Model)
+            this.KeyPressAction("Key_F",this.isPress.F)
+        }
+        else if(code === 'KeyQ')
+        {
+            this.KeyPressAction("Key_Q",this.isPress.Q)
+        }
+        else if(code === 'KeyW')
+        {
+            this.KeyPressAction("Key_W",this.isPress.W)
+        }
+        else if(code === 'KeyE')
+        {
+            this.KeyPressAction("Key_E",this.isPress.E)
+        }
+        else if(code == "KeyR")
+        {
+            this.KeyPressAction("Key_R",this.isPress.R)
+        }
+        else if(code == "KeyT")
+        {
+            this.KeyPressAction("Key_T",this.isPress.T)
+        }
+        else if(code == "KeyY")
+        {
+            this.KeyPressAction("Key_Y",this.isPress.Y)
+        }
+        else if(code == "KeyU")
+        {
+            this.KeyPressAction("Key_U",this.isPress.U)
+        }
+        else if(code == "KeyI")
+        {
+            this.KeyPressAction("Key_I",this.isPress.I)
+        }
+        else if(code == "KeyO")
+        {
+            this.KeyPressAction("Key_O",this.isPress.O)
+        }
+        else if(code == "KeyP")
+        {
+            this.KeyPressAction("Key_P",this.isPress.Y)
+        }
+        else if(code == "BracketLeft")
+        {
+            this.KeyPressAction("Key_BracketLeft",this.isPress.BracketLeft)
+        }
+        else if(code == "BracketRight")
+        {
+            this.KeyPressAction("Key_BracketRight",this.isPress.BracketRight)
+        }
+        else if(code == "Backslash")
+        {
+            this.KeyPressAction("Key_Backslash",this.isPress.Backslash)
+        }
+        else if(code == "KeyA")
+        {
+            this.KeyPressAction("Key_A",this.isPress.A)
+        }
+        else if(code == "KeyS")
+        {
+            this.KeyPressAction("Key_S",this.isPress.S)
+        }
+        else if(code == "KeyD")
+        {
+            this.KeyPressAction("Key_D",this.isPress.D)
+        }
+        else if(code == "KeyG")
+        {
+            this.KeyPressAction("Key_G",this.isPress.G)
+        }
+        else if(code == "KeyH")
+        {
+            this.KeyPressAction("Key_H",this.isPress.H)
+        }
+        else if(code == "KeyJ")
+        {
+            this.KeyPressAction("Key_J",this.isPress.J)
+        }
+        else if(code == "KeyK")
+        {
+            this.KeyPressAction("Key_K",this.isPress.K)
+        }
+        else if(code == "KeyL")
+        {
+            this.KeyPressAction("Key_L",this.isPress.L)
+        }
+        else if(code == "Semicolon")
+        {
+            this.KeyPressAction("Key_;",this.isPress.Semicolon)
+        }
+        else if(code == "Quote")
+        {
+            this.KeyPressAction("Key_'",this.isPress.Quote)
+        }
+        else if(code == "Enter")
+        {
+            this.KeyPressAction("Key_Enter",this.isPress.Enter)
+        }
+        else if(code == "KeyZ")
+        {
+            this.KeyPressAction("Key_Z",this.isPress.Z)
+        }
+        else if(code == "KeyX")
+        {
+            this.KeyPressAction("Key_X",this.isPress.X)
+        }
+        else if(code == "KeyC")
+        {
+            this.KeyPressAction("Key_C",this.isPress.C)
+        }
+        else if(code == "KeyV")
+        {
+            this.KeyPressAction("Key_V",this.isPress.V)
+        }
+        else if(code == "KeyB")
+        {
+            this.KeyPressAction("Key_B",this.isPress.B)
+        }
+        else if(code == "KeyN")
+        {
+            this.KeyPressAction("Key_N",this.isPress.N)
+        }
+        else if(code == "KeyM")
+        {
+            this.KeyPressAction("Key_M",this.isPress.M)
+        }
+        else if(code == "Comma")
+        {
+            this.KeyPressAction("Key_<",this.isPress.Comma)
+        }
+        else if(code == "Period")
+        {
+            this.KeyPressAction("Key_>",this.isPress.Period)
+        }
+        else if(code == "Slash")
+        {
+            this.KeyPressAction("Key_Slash",this.isPress.Slash)
+        }
+        else if(code == "Digit1")
+        {
+            this.KeyPressAction("Key_1",this.isPress.Digit1)
+        }
+        else if(code == "Digit2")
+        {
+            this.KeyPressAction("Key_2",this.isPress.Digit2)
+        }
+        else if(code == "Digit3")
+        {
+            this.KeyPressAction("Key_3",this.isPress.Digit3)
+        }
+        else if(code == "Digit4")
+        {
+            this.KeyPressAction("Key_4",this.isPress.Digit4)
+        }
+        else if(code == "Digit5")
+        {
+            this.KeyPressAction("Key_5",this.isPress.Digit5)
+        }
+        else if(code == "Digit6")
+        {
+            this.KeyPressAction("Key_6",this.isPress.Digit6)
+        }
+        else if(code == "Digit7")
+        {
+            this.KeyPressAction("Key_7",this.isPress.Digit7)
+        }
+        else if(code == "Digit8")
+        {
+            this.KeyPressAction("Key_8",this.isPress.Digit8)
+        }
+        else if(code == "Digit9")
+        {
+            this.KeyPressAction("Key_9",this.isPress.Digit9)
+        }
+        else if(code == "Digit0")
+        {
+            this.KeyPressAction("Key_0",this.isPress.Digit0)
+        }
+        else if(code == "Minus")
+        {
+            this.KeyPressAction("Key_-",this.isPress.Minus)
+        }
+         else if(code == "Equal")
+        {
+            this.KeyPressAction("Key_=",this.isPress.Equal)
+        }
+        else if(code == "Backspace")
+        {
+            // console.log("backspace")
+            // this.KeyPressAction("Key_Backspace",this.isPress.Backspace)
+        }
+        else if(code == "Space")
+        {
+            this.KeyPressAction("Key_Spacebar",this.isPress.Space)
         }
     }
         
-    
     KeyUp = Key => {
         const name = Key.key
         const code = Key.code
-        //console.log("Code is " + code)
         if(code === 'KeyF')
         {
-            console.log("Press KeyF")
-            console.log(this.KeyChronQ2Model)
-            this.KeyChronQ2Model.traverse(geo => 
-            {
-                if(geo instanceof Mesh)
-                {
-                    if(geo.name === "Key_F")
-                    {
-                        geo.getObjectByName("Key_F").position.y = geo.getObjectByName("Key_F").position.y - PressDownAmount.Amount 
-                        this.isPress.F = false
-                    }          
-                }
-            })
+           this.KeyReleaseAction("Key_F",this.isPress.F) 
+        }
+        else if(code === 'KeyQ')
+        {
+            this.KeyReleaseAction("Key_Q",this.isPress.Q)
+        }
+        else if(code === 'KeyW')
+        {
+            this.KeyReleaseAction("Key_W",this.isPress.W)
+        }
+        else if(code === 'KeyE')
+        {
+            this.KeyReleaseAction("Key_E",this.isPress.E)
+        }
+        else if(code == "KeyR")
+        {
+            this.KeyReleaseAction("Key_R",this.isPress.R)
+        }
+        else if(code == "KeyT")
+        {
+            this.KeyReleaseAction("Key_T",this.isPress.T)
+        }
+        else if(code == "KeyY")
+        {
+            this.KeyReleaseAction("Key_Y",this.isPress.Y)
+        }
+        else if(code == "KeyU")
+        {
+            this.KeyReleaseAction("Key_U",this.isPress.U)
+        }
+        else if(code == "KeyI")
+        {
+            this.KeyReleaseAction("Key_I",this.isPress.I)
+        }
+        else if(code == "KeyO")
+        {
+            this.KeyReleaseAction("Key_O",this.isPress.O)
+        }
+        else if(code == "KeyP")
+        {
+            this.KeyReleaseAction("Key_P",this.isPress.Y)
+        }
+        else if(code == "BracketLeft")
+        {
+            this.KeyReleaseAction("Key_BracketLeft",this.isPress.BracketLeft)
+        }
+        else if(code == "BracketRight")
+        {
+            this.KeyReleaseAction("Key_BracketRight",this.isPress.BracketRight)
+        }
+        else if(code == "Backslash")
+        {
+            this.KeyReleaseAction("Key_Backslash",this.isPress.Backslash)
+        }
+        else if(code == "KeyA")
+        {
+            this.KeyReleaseAction("Key_A",this.isPress.A)
+        }
+        else if(code == "KeyS")
+        {
+            this.KeyReleaseAction("Key_S",this.isPress.S)
+        }
+        else if(code == "KeyD")
+        {
+            this.KeyReleaseAction("Key_D",this.isPress.D)
+        }
+        else if(code == "KeyG")
+        {
+            this.KeyReleaseAction("Key_G",this.isPress.G)
+        }
+        else if(code == "KeyH")
+        {
+            this.KeyReleaseAction("Key_H",this.isPress.H)
+        }
+        else if(code == "KeyJ")
+        {
+            this.KeyReleaseAction("Key_J",this.isPress.J)
+        }
+        else if(code == "KeyK")
+        {
+            this.KeyReleaseAction("Key_K",this.isPress.K)
+        }
+        else if(code == "KeyL")
+        {
+            this.KeyReleaseAction("Key_L",this.isPress.L)
+        }
+        else if(code == "Semicolon")
+        {
+            this.KeyReleaseAction("Key_;",this.isPress.Semicolon)
+        }
+        else if(code == "Quote")
+        {
+            this.KeyReleaseAction("Key_'",this.isPress.Quote)
+        }
+        else if(code == "Enter")
+        {
+            this.KeyReleaseAction("Key_Enter",this.isPress.Enter)
+        }
+        else if(code == "KeyZ")
+        {
+            this.KeyReleaseAction("Key_Z",this.isPress.Z)
+        }
+        else if(code == "KeyX")
+        {
+            this.KeyReleaseAction("Key_X",this.isPress.X)
+        }
+        else if(code == "KeyC")
+        {
+            this.KeyReleaseAction("Key_C",this.isPress.C)
+        }
+        else if(code == "KeyV")
+        {
+            this.KeyReleaseAction("Key_V",this.isPress.V)
+        }
+        else if(code == "KeyB")
+        {
+            this.KeyReleaseAction("Key_B",this.isPress.B)
+        }
+        else if(code == "KeyN")
+        {
+            this.KeyReleaseAction("Key_N",this.isPress.N)
+        }
+        else if(code == "KeyM")
+        {
+            this.KeyReleaseAction("Key_M",this.isPress.M)
+        }
+        else if(code == "Comma")
+        {
+            this.KeyReleaseAction("Key_<",this.isPress.Comma)
+        }
+        else if(code == "Period")
+        {
+            this.KeyReleaseAction("Key_>",this.isPress.Period)
+        }
+        else if(code == "Slash")
+        {
+            this.KeyReleaseAction("Key_Slash",this.isPress.Slash)
+        }
+        else if(code == "Digit1")
+        {
+            this.KeyReleaseAction("Key_1",this.isPress.Digit1)
+        }
+        else if(code == "Digit2")
+        {
+            this.KeyReleaseAction("Key_2",this.isPress.Digit2)
+        }
+        else if(code == "Digit3")
+        {
+            this.KeyReleaseAction("Key_3",this.isPress.Digit3)
+        }
+        else if(code == "Digit4")
+        {
+            this.KeyReleaseAction("Key_4",this.isPress.Digit4)
+        }
+        else if(code == "Digit5")
+        {
+            this.KeyReleaseAction("Key_5",this.isPress.Digit5)
+        }
+        else if(code == "Digit6")
+        {
+            this.KeyReleaseAction("Key_6",this.isPress.Digit6)
+        }
+        else if(code == "Digit7")
+        {
+            this.KeyReleaseAction("Key_7",this.isPress.Digit7)
+        }
+        else if(code == "Digit8")
+        {
+            this.KeyReleaseAction("Key_8",this.isPress.Digit8)
+        }
+        else if(code == "Digit9")
+        {
+            this.KeyReleaseAction("Key_9",this.isPress.Digit9)
+        }
+        else if(code == "Digit0")
+        {
+            this.KeyReleaseAction("Key_0",this.isPress.Digit0)
+        }
+        else if(code == "Minus")
+        {
+            this.KeyReleaseAction("Key_-",this.isPress.Minus)
+        }
+         else if(code == "Equal")
+        {
+            this.KeyReleaseAction("Key_=",this.isPress.Equal)
+        }
+        else if(code == "Backspace")
+        {
+            // this.KeyReleaseAction("Key_Backspace",this.isPress.Backspace)
+        }
+        else if(code == "Space")
+        {
+            this.KeyReleaseAction("Key_Spacebar",this.isPress.Space)
         }
     }
 
@@ -195,8 +638,10 @@ export class KeychronQ2Render {
         //this.scene.background = this.exrBackground
 
         const gui = new GUI()
-        gui.add(HDRIParameter,'exposure', 0 , 4 , 0.01).onChange(this.UpdateRender);
-
+        //gui.add(HDRIParameter,'exposure', 0 , 4 , 0.01).onChange(this.UpdateRender)
+        gui.add(PressDownAmount,'Amount',-0.001,-0.01,0.00000001).onChange(this.UpdateRender)
+        //const PressKeyGUI = new GUI()
+        //PressKeyGUI.add(PressDownAmount, 'PressDownAmount',0 , 1, 0.0001).onChange(this.UpdateRender)
 
         /**
          * Default Sphere
