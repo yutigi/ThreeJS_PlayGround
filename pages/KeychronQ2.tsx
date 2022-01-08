@@ -23,7 +23,6 @@ const KeychronQ2RenderPage = () => {
 					display: block;
 				}
 			`}</style>
-
             <canvas ref= { canvas}></canvas>
 
         </>

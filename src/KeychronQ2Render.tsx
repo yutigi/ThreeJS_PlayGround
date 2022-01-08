@@ -1,4 +1,4 @@
-import {  ACESFilmicToneMapping, AmbientLight, DefaultLoadingManager, Group, Mesh, MeshPhysicalMaterial, PCFSoftShadowMap, PerspectiveCamera, PMREMGenerator, PointLight, PointLightHelper, Scene, SpotLight, SpotLightHelper, Texture, TextureLoader, UnsignedByteType, Vector2, Vector3, WebGLCubeRenderTarget, WebGLRenderer, WebGLRenderTarget } from "three"
+import {  ACESFilmicToneMapping, AmbientLight, AudioListener, AudioLoader, Camera, DefaultLoadingManager, Group, Mesh, MeshPhysicalMaterial, PCFSoftShadowMap, PerspectiveCamera, PMREMGenerator, PointLight, PointLightHelper, PositionalAudio, Raycaster, Scene, SpotLight, SpotLightHelper, Texture, TextureLoader, UnsignedByteType, Vector2, Vector3, WebGLCubeRenderTarget, WebGLRenderer, WebGLRenderTarget } from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
@@ -10,6 +10,7 @@ import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 import { threadId } from "worker_threads";
 import { group } from "console";
+import { listeners } from "process";
 
 const HDRIParameter = {
     exposure: 1.0
@@ -18,6 +19,13 @@ const HDRIParameter = {
 const PressDownAmount = {
     Amount: -0.005
 }
+
+interface ObjectKey {
+    positionY: number,
+    object: Mesh
+}
+
+const mouse = new Vector2()
 
 const keyCodes = {
   0: 'That key has no keycode',
@@ -224,7 +232,7 @@ export class KeychronQ2Render {
     exrCubeRenderTarget: WebGLRenderTarget
     exrBackground: Texture
 
-    defaultPositions: Map<string, number> = new Map<string, number>()
+    defaultPositions: Map<string, ObjectKey> = new Map<string, ObjectKey>()
  
     // layer 1
     Backquote: boolean
@@ -287,7 +295,11 @@ export class KeychronQ2Render {
     Slash: boolean
     Shift_R: boolean
     // layer 5
-    Space: boolean 
+    Space: boolean
+
+    raycaster: Raycaster = new Raycaster()
+
+    currentSelect:string
 
     constructor(canvas: HTMLElement) {
         this.canvas = canvas
@@ -300,15 +312,80 @@ export class KeychronQ2Render {
         window.addEventListener('resize', this.windowResize)
         window.addEventListener('keydown', this.KeyPress)
         window.addEventListener('keyup', this.KeyUp)
+        window.addEventListener('pointerdown', this.PointerDown)
+        window.addEventListener('pointerup', this.PointerUp)
+        window.addEventListener('pointermove', this.PointerMove)
     }
 
-    KeyPressAction = (Key:string ,isPress:boolean):boolean =>{
+    PointerDown = (e) => {
+        
+        mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+	    mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+
+        this.raycaster.setFromCamera(mouse,this.camera)
+        const intersects = this.raycaster.intersectObjects(this.scene.children)
+        //console.log(intersects)
+        if(intersects.length > 0)
+        {
+            console.log(intersects[0].object)
+            const selectedKey = intersects[0].object
+            if(selectedKey.name != 'Keybord_Body_Frame')
+            {
+                this.KeyPressAction(selectedKey.name)
+                this.currentSelect = selectedKey.name
+            }
+        }
+    }
+
+    PointerUp = (e) => {
+        mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+	    mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+
+        this.raycaster.setFromCamera(mouse,this.camera)
+        const intersects = this.raycaster.intersectObjects(this.scene.children)
+        if(intersects.length > 0)
+        {
+            const selectedKey = intersects[0].object
+            if(selectedKey.name != 'Keybord_Body_Frame')
+            {
+                this.KeyReleaseAction(selectedKey.name)
+            }
+        }
+    }
+
+    PointerMove = (e) => {
+        mouse.x = ( e.clientX / window.innerWidth ) * 2 - 1;
+	    mouse.y = - ( e.clientY / window.innerHeight ) * 2 + 1;
+
+        this.raycaster.setFromCamera(mouse,this.camera)
+        const intersects = this.raycaster.intersectObjects(this.scene.children)
+        if(intersects.length > 0)
+        {
+            const selectedKey = intersects[0].object
+            if(selectedKey.name != 'Keybord_Body_Frame')
+            {
+                if(selectedKey.name != this.currentSelect)
+                {
+                    this.KeyReleaseAction(this.currentSelect)
+                    this.currentSelect = ""
+                }
+            }
+        }
+    }
+
+    KeyPressAction = (Key:string ,isPress:boolean = false):boolean =>{
         this.KeyChronQ2Model.traverse(geo =>{
             if(geo instanceof Mesh)
             {
                 if(geo.name === Key && !isPress)
                 {
-                    geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key) + PressDownAmount.Amount 
+                    geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key).positionY + PressDownAmount.Amount 
+                    
+                    if(this.defaultPositions.get(Key).object.children.length > 0)
+                    {
+                        this.defaultPositions.get(Key).object.children[0].play()
+                    }
+                    
                     isPress = true
                     return true
                 }          
@@ -316,13 +393,13 @@ export class KeychronQ2Render {
         })
         return false
     }
-    KeyReleaseAction = (Key:string ,isPress:boolean):boolean =>{
+    KeyReleaseAction = (Key:string ,isPress:boolean = false):boolean =>{
         this.KeyChronQ2Model.traverse(geo =>{
             if(geo instanceof Mesh)
             {
                 if(geo.name === Key && !isPress)
                 {
-                    geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key) 
+                    geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key).positionY
                     isPress = false
                 }          
             }
@@ -989,7 +1066,7 @@ export class KeychronQ2Render {
                 {
                     console.log(geo.name)
                     
-                    this.defaultPositions.set(geo.name,geo.position.y)
+                    this.defaultPositions.set(geo.name,{positionY:geo.position.y, object:geo})
 
                     // if(geo.name != "Mushroom_Quad")
                     // {
@@ -1022,6 +1099,35 @@ export class KeychronQ2Render {
             //model.castShadow = true
             //model.scale.set(0.01,0.01,0.01)
             this.scene.add(model)
+
+
+            // load sound
+            const audioLoader = new AudioLoader()
+            const listener = new AudioListener()
+            this.camera.add(listener)
+    
+            audioLoader.load('keytap.mp3', buffer => {
+                
+                //console.log(buffer)
+                this.defaultPositions.forEach( (value,key) =>{
+                    const audio = new PositionalAudio( listener );
+                    audio.setBuffer( buffer );
+                    //this.scene.add(audio)
+                    
+                    this.defaultPositions.get(key).object.add(audio)
+
+                    // this.KeyChronQ2Model.traverse(geo =>{
+                    //     if(geo instanceof Mesh)
+                    //     {
+                    //         if(geo.name === key)
+                    //         {
+                    //             geo.add(audio)
+                    //         }          
+                    //     }
+                    // })
+                })
+            })
+
         })
 
     }
