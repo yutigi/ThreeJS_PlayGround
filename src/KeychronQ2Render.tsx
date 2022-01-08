@@ -243,6 +243,7 @@ export class KeychronQ2Render {
     Backspace: boolean
 
     // layer 2
+    Tab: boolean
     Q: boolean
     W: boolean
     E: boolean
@@ -258,6 +259,7 @@ export class KeychronQ2Render {
     Backslash: boolean
     
     // layer 3
+    Capslock: boolean
     F: boolean
     D: boolean
     A: boolean
@@ -272,6 +274,7 @@ export class KeychronQ2Render {
     Enter: boolean
 
     // layer 4
+    Shift_L: boolean
     Z: boolean
     X: boolean
     C: boolean
@@ -282,6 +285,7 @@ export class KeychronQ2Render {
     Comma: boolean
     Period: boolean
     Slash: boolean
+    Shift_R: boolean
     // layer 5
     Space: boolean 
 
@@ -330,34 +334,34 @@ export class KeychronQ2Render {
         this.KeyChronQ2Model.traverse(geo =>{
             if(geo instanceof Mesh)
             {
-                let Key:String
+                // let Key:String
 
-                switch (KeyCode) {
-                    case 192:
-                        Key = 'Key_ESC'
-                        break
-                    case 27: 
-                        Key = 'Key_ESC'
-                        break
-                    default:
-                        break
-                }
+                // switch (KeyCode) {
+                //     case 192:
+                //         Key = 'Key_ESC'
+                //         break
+                //     case 27: 
+                //         Key = 'Key_ESC'
+                //         break
+                //     default:
+                //         break
+                // }
 
-                if(geo.name === Key)
-                {
-                    if(isKeyPress && !isPress)
-                    {
-                        geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y + PressDownAmount.Amount
-                        isPress = true
-                        return true
-                    }
-                    if(!isKeyPress && !isPress)
-                    {
-                        geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y - PressDownAmount.Amount 
-                        isPress = false
-                        return false
-                    }
-                }          
+                // if(geo.name === Key)
+                // {
+                //     if(isKeyPress && !isPress)
+                //     {
+                //         geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y + PressDownAmount.Amount
+                //         isPress = true
+                //         return true
+                //     }
+                //     if(!isKeyPress && !isPress)
+                //     {
+                //         geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y - PressDownAmount.Amount 
+                //         isPress = false
+                //         return false
+                //     }
+                // }          
             }
         })
         return false
@@ -368,25 +372,50 @@ export class KeychronQ2Render {
         const name = Key.key
         const code = Key.code
         const KeyCode = Key.KeyCode
+        Key.preventDefault()
         if(code === 'KeyF')
         {
             //console.log("Press KeyF")
             //console.log(this.KeyChronQ2Model)
             this.KeyPressAction("Key_F",this.F)
         }
-        else if(KeyCode == 192 || KeyCode == 27) // esc or Backquote ` or ~
+        else if(KeyCode === 192 || KeyCode === 27) // esc or Backquote ` or ~
         {
             this.KeyPressActionCharCode(KeyCode,this.Backquote,true)
+        }
+        else if(code === 'Escape')
+        {
+            this.KeyPressAction("Key_ESC",this.Backquote)
+        }
+        else if(code === 'Tab')
+        {
+            this.KeyPressAction("Key_Tap",this.Tab)
+        }
+        else if(code === 'CapsLock')
+        {
+            this.KeyPressAction("Key_Capslock",this.Capslock)
+        }
+        else if(code === 'ShiftLeft')
+        {
+            this.KeyPressAction("Key_Shift_L",this.Shift_L)
+        }
+        else if(code === 'ShiftRight')
+        {
+            this.KeyPressAction("Key_Shift_R",this.Shift_R)
+        }
+        else if(code === 'Backspace')
+        {
+            this.KeyPressAction("Key_Backspace",this.Backspace)
         }
         else if(code === 'KeyQ')
         {
             this.Q = this.KeyPressAction("Key_Q",this.Q)
         }
-        else if(code === 'KeyW')
+        else if(code == 'KeyW')
         {
             this.KeyPressAction("Key_W",this.W)
         }
-        else if(code === 'KeyE')
+        else if(code == 'KeyE')
         {
             this.KeyPressAction("Key_E",this.E)
         }
@@ -584,6 +613,30 @@ export class KeychronQ2Render {
         else if(KeyCode == 192 || KeyCode == 27) // esc or Backquote ` or ~
         {
             this.KeyPressActionCharCode(KeyCode,this.Backquote,false)
+        }
+        else if(code === 'Escape')
+        {
+            this.KeyReleaseAction("Key_ESC",this.Backquote)
+        }
+        else if(code === 'Tab')
+        {
+            this.KeyReleaseAction("Key_Tap",this.Tab)
+        }
+        else if(code === 'CapsLock')
+        {
+            this.KeyReleaseAction("Key_Capslock",this.Capslock)
+        }
+        else if(code === 'ShiftLeft')
+        {
+            this.KeyReleaseAction("Key_Shift_L",this.Shift_L)
+        }
+        else if(code === 'ShiftRight')
+        {
+            this.KeyReleaseAction("Key_Shift_R",this.Shift_R)
+        }
+        else if(code === 'Backspace')
+        {
+            this.KeyReleaseAction("Key_Backspace",this.Backspace)
         }
         else if(code === 'KeyQ')
         {
