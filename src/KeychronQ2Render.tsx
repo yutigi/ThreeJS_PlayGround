@@ -381,9 +381,11 @@ export class KeychronQ2Render {
                 {
                     geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key).positionY + PressDownAmount.Amount 
                     
-                    if(this.defaultPositions.get(Key).object.children.length > 0)
+                    const AudioObj = this.defaultPositions.get(Key).object.children
+
+                    if(AudioObj.length > 0)
                     {
-                        this.defaultPositions.get(Key).object.children[0].play()
+                        (AudioObj[0] as PositionalAudio).play()
                     }
                     
                     isPress = true
