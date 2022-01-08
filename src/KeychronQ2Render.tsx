@@ -203,6 +203,7 @@ const keyCodes = {
   255: 'toggle touchpad',
 }
 
+
 export class KeychronQ2Render {
     private canvas: HTMLElement
     private renderer: WebGLRenderer
@@ -223,6 +224,8 @@ export class KeychronQ2Render {
     exrCubeRenderTarget: WebGLRenderTarget
     exrBackground: Texture
 
+    defaultPositions: Map<string, number> = new Map<string, number>()
+ 
     // layer 1
     Backquote: boolean
     Digit1: boolean
@@ -301,7 +304,7 @@ export class KeychronQ2Render {
             {
                 if(geo.name === Key && !isPress)
                 {
-                    geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y + PressDownAmount.Amount 
+                    geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key) + PressDownAmount.Amount 
                     isPress = true
                     return true
                 }          
@@ -315,7 +318,7 @@ export class KeychronQ2Render {
             {
                 if(geo.name === Key && !isPress)
                 {
-                    geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y - PressDownAmount.Amount 
+                    geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key) 
                     isPress = false
                 }          
             }
@@ -932,6 +935,9 @@ export class KeychronQ2Render {
                 if(geo instanceof Mesh)
                 {
                     console.log(geo.name)
+                    
+                    this.defaultPositions.set(geo.name,geo.position.y)
+
                     // if(geo.name != "Mushroom_Quad")
                     // {
                     //     geo.receiveShadow = true
