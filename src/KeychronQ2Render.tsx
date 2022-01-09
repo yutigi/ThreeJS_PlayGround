@@ -11,6 +11,8 @@ import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min'
 import { threadId } from "worker_threads";
 import { group } from "console";
 import { listeners } from "process";
+import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader"
 
 const HDRIParameter = {
     exposure: 1.0
@@ -227,6 +229,8 @@ export class KeychronQ2Render {
     renderPass: RenderPass
     
     bloompass: UnrealBloomPass
+
+    fxaaPass: ShaderPass
 
     KeyChronQ2Model: Group
 
@@ -988,9 +992,14 @@ export class KeychronQ2Render {
         this.renderPass = new RenderPass(this.scene,this.camera)
         this.bloompass = new UnrealBloomPass(new Vector2(window.innerWidth, window.innerHeight), 5, 1, 0.8)
         
+        this.fxaaPass = new ShaderPass(FXAAShader)
+        this.fxaaPass.material.uniforms[ 'resolution' ].value.x = 1 / ( window.innerWidth * this.windowsize.width/this.windowsize.height )
+        this.fxaaPass.material.uniforms[ 'resolution' ].value.y = 1 / ( window.innerHeight * this.windowsize.width/this.windowsize.height )
+
+
         this.composer.addPass(this.renderPass)
         this.composer.addPass(this.bloompass)
-
+        this.composer.addPass(this.fxaaPass)
         // controls
         this.controls = new OrbitControls( this.camera, this.renderer.domElement );
         this.controls.update()
