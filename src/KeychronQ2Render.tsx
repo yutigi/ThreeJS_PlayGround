@@ -17,7 +17,8 @@ const HDRIParameter = {
 }
 
 const PressDownAmount = {
-    Amount: -0.005
+    Amount: -0.005,
+    Volume: 1
 }
 
 interface ObjectKey {
@@ -391,10 +392,9 @@ export class KeychronQ2Render {
                         {
                             audio.stop()
                         }
+                        audio.setVolume(PressDownAmount.Volume)
                         audio.play()
                     }
-                    
-                    isPress = true
                     return true
                 }          
             }
@@ -408,45 +408,7 @@ export class KeychronQ2Render {
                 if(geo.name === Key && !isPress)
                 {
                     geo.getObjectByName(Key).position.y = this.defaultPositions.get(Key).positionY
-                    isPress = false
                 }          
-            }
-        })
-        return false
-    }
-
-    KeyPressActionCharCode = (KeyCode:Number, isPress:boolean, isKeyPress:boolean):boolean => {
-        this.KeyChronQ2Model.traverse(geo =>{
-            if(geo instanceof Mesh)
-            {
-                // let Key:String
-
-                // switch (KeyCode) {
-                //     case 192:
-                //         Key = 'Key_ESC'
-                //         break
-                //     case 27: 
-                //         Key = 'Key_ESC'
-                //         break
-                //     default:
-                //         break
-                // }
-
-                // if(geo.name === Key)
-                // {
-                //     if(isKeyPress && !isPress)
-                //     {
-                //         geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y + PressDownAmount.Amount
-                //         isPress = true
-                //         return true
-                //     }
-                //     if(!isKeyPress && !isPress)
-                //     {
-                //         geo.getObjectByName(Key).position.y = geo.getObjectByName(Key).position.y - PressDownAmount.Amount 
-                //         isPress = false
-                //         return false
-                //     }
-                // }          
             }
         })
         return false
@@ -463,10 +425,6 @@ export class KeychronQ2Render {
             //console.log("Press KeyF")
             //console.log(this.KeyChronQ2Model)
             this.KeyPressAction("Key_F",this.F)
-        }
-        else if(KeyCode === 192 || KeyCode === 27) // esc or Backquote ` or ~
-        {
-            this.KeyPressActionCharCode(KeyCode,this.Backquote,true)
         }
         else if(code === 'Escape')
         {
@@ -734,10 +692,6 @@ export class KeychronQ2Render {
         if(code === 'KeyF')
         {
            this.KeyReleaseAction("Key_F",this.F) 
-        }
-        else if(KeyCode == 192 || KeyCode == 27) // esc or Backquote ` or ~
-        {
-            this.KeyPressActionCharCode(KeyCode,this.Backquote,false)
         }
         else if(code === 'Escape')
         {
@@ -1091,7 +1045,8 @@ export class KeychronQ2Render {
 
         const gui = new GUI()
         //gui.add(HDRIParameter,'exposure', 0 , 4 , 0.01).onChange(this.UpdateRender)
-        gui.add(PressDownAmount,'Amount',-0.001,-0.01,0.00000001).onChange(this.UpdateRender)
+        //gui.add(PressDownAmount,'Amount',-0.001,-0.01,0.00000001).onChange(this.UpdateRender)
+        gui.add(PressDownAmount,'Volume',0,3,0.01).onChange(this.UpdateRender)
         //const PressKeyGUI = new GUI()
         //PressKeyGUI.add(PressDownAmount, 'PressDownAmount',0 , 1, 0.0001).onChange(this.UpdateRender)
 
