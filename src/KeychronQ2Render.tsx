@@ -385,7 +385,13 @@ export class KeychronQ2Render {
 
                     if(AudioObj.length > 0)
                     {
-                        (AudioObj[0] as PositionalAudio).play()
+                        //(AudioObj[0] as PositionalAudio).play()
+                        const audio: PositionalAudio = AudioObj[0] as PositionalAudio
+                        if(audio.isPlaying)
+                        {
+                            audio.stop()
+                        }
+                        audio.play()
                     }
                     
                     isPress = true
@@ -485,6 +491,46 @@ export class KeychronQ2Render {
         else if(code === 'Backspace')
         {
             this.KeyPressAction("Key_Backspace",this.Backspace)
+        }
+        else if(code === 'ArrowUp')
+        {
+            this.KeyPressAction("Key_ArrowUp")
+        }
+        else if(code === 'ArrowDown')
+        {
+            this.KeyPressAction("Key_ArrowDown")
+        }
+        else if(code === 'ArrowLeft')
+        {
+            this.KeyPressAction("Key_ArrowLeft")
+        }
+        else if(code === 'ArrowRight')
+        {
+            this.KeyPressAction("Key_ArrowRight")
+        }
+        else if(code === 'ControlLeft')
+        {
+            this.KeyPressAction("Key_Control")
+        }
+        else if(code === 'MetaLeft')
+        {
+            this.KeyPressAction("Key_Option")
+        }
+        else if(code === 'AltLeft')
+        {
+            this.KeyPressAction("Key_Command_L")
+        }
+        else if(code === 'AltRight')
+        {
+            this.KeyPressAction("Key_Command_R")
+        }
+        else if(code === 'Delete')
+        {
+            this.KeyPressAction("Key_Del")
+        }
+        else if(code === 'Home')
+        {
+            this.KeyPressAction("Key_Home")
         }
         else if(code === 'KeyQ')
         {
@@ -716,6 +762,46 @@ export class KeychronQ2Render {
         else if(code === 'Backspace')
         {
             this.KeyReleaseAction("Key_Backspace",this.Backspace)
+        }
+        else if(code === 'ArrowUp')
+        {
+            this.KeyReleaseAction("Key_ArrowUp")
+        }
+        else if(code === 'ArrowDown')
+        {
+            this.KeyReleaseAction("Key_ArrowDown")
+        }
+        else if(code === 'ArrowLeft')
+        {
+            this.KeyReleaseAction("Key_ArrowLeft")
+        }
+        else if(code === 'ArrowRight')
+        {
+            this.KeyReleaseAction("Key_ArrowRight")
+        }
+        else if(code === 'ControlLeft')
+        {
+            this.KeyReleaseAction("Key_Control")
+        }
+        else if(code === 'MetaLeft')
+        {
+            this.KeyReleaseAction("Key_Option")
+        }
+        else if(code === 'AltLeft')
+        {
+            this.KeyReleaseAction("Key_Command_L")
+        }
+        else if(code === 'AltRight')
+        {
+            this.KeyReleaseAction("Key_Command_R")
+        }
+        else if(code === 'Delete')
+        {
+            this.KeyReleaseAction("Key_Del")
+        }
+        else if(code === 'Home')
+        {
+            this.KeyReleaseAction("Key_Home")
         }
         else if(code === 'KeyQ')
         {
