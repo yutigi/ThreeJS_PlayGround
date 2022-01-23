@@ -30,11 +30,15 @@ const KeychronQ2RenderPage = () => {
     useEffect(() => {
         document.title = "KeychronQ2",
         new KeychronQ2Render(canvas.current)
+        //document.body.style.backgroundColor = "Red"
+        //document.body.style.backgroundColor = "transparent"
+        //document.body.style.opacity = "0"
     },[])
 
     return(
         <>
-			<style jsx global>{`
+
+			{ <style jsx global>{`
 				* {
 					margin: 0;
 					padding: 0;
@@ -44,7 +48,7 @@ const KeychronQ2RenderPage = () => {
 				canvas {
 					display: block;
 				}
-			`}</style>
+			`}</style> }
 
             <canvas ref= { canvas}></canvas>
 

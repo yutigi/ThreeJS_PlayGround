@@ -1,4 +1,4 @@
-import {  ACESFilmicToneMapping, AmbientLight, AudioListener, AudioLoader, Camera, DefaultLoadingManager, Group, Mesh, MeshPhysicalMaterial, PCFSoftShadowMap, PerspectiveCamera, PMREMGenerator, PointLight, PointLightHelper, PositionalAudio, Raycaster, Scene, SpotLight, SpotLightHelper, Texture, TextureLoader, UnsignedByteType, Vector2, Vector3, WebGLCubeRenderTarget, WebGLRenderer, WebGLRenderTarget } from "three"
+import {  ACESFilmicToneMapping, AmbientLight, AudioListener, AudioLoader, Camera, Color, DefaultLoadingManager, Group, Mesh, MeshPhysicalMaterial, PCFSoftShadowMap, PerspectiveCamera, PMREMGenerator, PointLight, PointLightHelper, PositionalAudio, Raycaster, Scene, SpotLight, SpotLightHelper, Texture, TextureLoader, UnsignedByteType, Vector2, Vector3, WebGLCubeRenderTarget, WebGLRenderer, WebGLRenderTarget } from "three"
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls"
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader"
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
@@ -972,6 +972,7 @@ export class KeychronQ2Render {
         this.renderer = new WebGLRenderer({canvas:this.canvas, antialias: true, alpha:true})
         this.renderer.setSize(this.windowsize.width,this.windowsize.height)
         this.renderer.setClearColor( 0x000000, 0 )
+        this.renderer.setClearAlpha( 0x000000 )
         this.renderer.toneMapping = ACESFilmicToneMapping
         this.renderer.toneMappingExposure = HDRIParameter.exposure
         this.renderer.physicallyCorrectLights = true
@@ -999,7 +1000,7 @@ export class KeychronQ2Render {
 
 
         this.composer.addPass(this.renderPass)
-        this.composer.addPass(this.bloompass)
+        //this.composer.addPass(this.bloompass) //disable bloom fx to make bg transparent
         this.composer.addPass(this.fxaaPass)
         // controls
         this.controls = new OrbitControls( this.camera, this.renderer.domElement );
@@ -1037,19 +1038,19 @@ export class KeychronQ2Render {
         //     this.scene.add(lightProbe)
         // }) 
         
-        /**
-         *  Load HDRI EXR
-         */
-        let pmrem: PMREMGenerator = new PMREMGenerator(this.renderer)
+        // /**
+        //  *  Load HDRI EXR
+        //  */
+        // let pmrem: PMREMGenerator = new PMREMGenerator(this.renderer)
         
-        const _EXRLoader = new EXRLoader()
-        _EXRLoader.load('courtyard.exr', EXR => {
-            //console.log(EXR)
-            this.exrCubeRenderTarget = pmrem.fromEquirectangular(EXR)
-            this.exrBackground = this.exrCubeRenderTarget.texture
-        })
+        // const _EXRLoader = new EXRLoader()
+        // _EXRLoader.load('courtyard.exr', EXR => {
+        //     //console.log(EXR)
+        //     this.exrCubeRenderTarget = pmrem.fromEquirectangular(EXR)
+        //     this.exrBackground = this.exrCubeRenderTarget.texture
+        // })
         
-        pmrem.compileEquirectangularShader()
+        // pmrem.compileEquirectangularShader()
         
         //this.scene.background = this.exrBackground
 
