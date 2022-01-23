@@ -969,8 +969,9 @@ export class KeychronQ2Render {
     }
 
     init() {
-        this.renderer = new WebGLRenderer({canvas:this.canvas, antialias: true})
+        this.renderer = new WebGLRenderer({canvas:this.canvas, antialias: true, alpha:true})
         this.renderer.setSize(this.windowsize.width,this.windowsize.height)
+        this.renderer.setClearColor( 0x000000, 0 )
         this.renderer.toneMapping = ACESFilmicToneMapping
         this.renderer.toneMappingExposure = HDRIParameter.exposure
         this.renderer.physicallyCorrectLights = true
